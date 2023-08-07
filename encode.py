@@ -30,15 +30,22 @@ def bin(inpath: str) -> None:
         file.write(encoded)
         file.close()
 
+def xor_str(data: str, key: str):
+    encoded = ''.join([chr(ord(char) ^ ord(key)) for char in data])
+    for char in encoded:
+        hex_value = hex(ord(char))[2:].zfill(2)
+        print(f"0x{hex_value}", end=', ')
+
 def main():
     if len(sys.argv) <= 1:
         return 1
     
     inpath = sys.argv[1]
     if not os.path.exists(inpath):
+        xor_str(inpath, 'A')
         return 1
     
-    b64(inpath)
+    # b64(inpath)
     bin(inpath)
 
     return 0
