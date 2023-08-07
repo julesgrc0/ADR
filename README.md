@@ -71,7 +71,7 @@ the ADR file is compressed with UPX to reduce the size of the exe.
 
 **ADR.bin (XOR)**
 
-*   ✅     72
+*   ✅     Virustotal 72/72
 *   ✅     Windows Defender
 *   ✅     Chrome AntiVirus
 *   ✅     Manalyzer
