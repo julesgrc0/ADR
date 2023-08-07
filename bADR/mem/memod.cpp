@@ -75,28 +75,6 @@ typedef struct {
 #define GET_HEADER_DICTIONARY(module, idx) \
   &(module)->headers->OptionalHeader.DataDirectory[idx]
 
-/*
-static HANDLE HideGetProcessHeap()
-{
-    HMODULE hModule = NULL;
-    HIDE_FUNCTION("kernel32.dll", GetProcessHeap, HANDLE, (), NULL);
-    return hide_GetProcessHeap();
-}
-
-static LPVOID HideHeapAlloc(HANDLE heap, DWORD flags, SIZE_T bytes)
-{
-    HMODULE hModule = NULL;
-    HIDE_FUNCTION("kernel32.dll", HeapAlloc, LPVOID, (HANDLE, DWORD, SIZE_T), NULL);
-    return hide_HeapAlloc(heap, flags, bytes);
-}
-
-static BOOL HideHeapFree(HANDLE heap, DWORD flags, LPVOID mem)
-{
-    HMODULE hModule = NULL;
-    HIDE_FUNCTION("kernel32.dll", HeapFree, BOOL, (HANDLE, DWORD,LPVOID), FALSE);
-    return hide_HeapFree(heap, flags, mem);
-}
-*/
 
 static inline uintptr_t AlignValueDown(uintptr_t value, uintptr_t alignment) {
   return value & ~(alignment - 1);
@@ -257,8 +235,6 @@ static BOOL FinalizeSection(PMEMORYMODULE module,
   if (sectionData->characteristics & IMAGE_SCN_MEM_NOT_CACHED) {
     protect |= PAGE_NOCACHE;
   }
-  HMODULE hModule = NULL;
-  HIDE_FUNCTION("kernel32.dll", VirtualProtect, BOOL, (LPVOID, SIZE_T, DWORD, PDWORD), FALSE);
   if (hide_VirtualProtect(sectionData->address, sectionData->size, protect,
                           &oldProtect) == 0) {
     OutputLastError("Error protecting memory page");
@@ -477,23 +453,19 @@ static BOOL BuildImportTable(PMEMORYMODULE module) {
 LPVOID MemoryDefaultAlloc(LPVOID address, SIZE_T size, DWORD allocationType,
                           DWORD protect, void *userdata) {
   UNREFERENCED_PARAMETER(userdata);
-  HMODULE hModule = NULL;
-  HIDE_FUNCTION("kernel32.dll", VirtualAlloc, LPVOID, (LPVOID, SIZE_T, DWORD, DWORD), NULL);
   return hide_VirtualAlloc(address, size, allocationType, protect);
 }
 
 BOOL MemoryDefaultFree(LPVOID lpAddress, SIZE_T dwSize, DWORD dwFreeType,
                        void *userdata) {
   UNREFERENCED_PARAMETER(userdata);
-  HMODULE hModule = NULL;
-  HIDE_FUNCTION("kernel32.dll", VirtualFree, BOOL, (LPVOID, SIZE_T, DWORD), FALSE);
   return hide_VirtualFree(lpAddress, dwSize, dwFreeType);
 }
 
 HCUSTOMMODULE MemoryDefaultLoadLibrary(LPCSTR filename, void *userdata) {
   HMODULE result;
   UNREFERENCED_PARAMETER(userdata);
-  result = LoadLibraryA(filename);
+  result = HLoadLibrary(filename);
   if (result == NULL) {
     return NULL;
   }
