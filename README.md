@@ -1,4 +1,4 @@
-# 😈 ADR
+# ADR 💥
 
 ADR is a trojan that retrieves all information on the computer and all data stored in applications using chormuim. It recovers cookies, tokens, passwords and saved bank cards. This malware is undetectable by Windows Defender, Chrome, Virustotal (2/71).
 
@@ -21,14 +21,6 @@ bADR uses a few tricks to avoid being detected by anti-viruses, in particular:
 * the masking of character strings, the url at which the payload is located, encrypt in XOR so as not to be readable in the executable directly
 * optimization of compiler parameters and compression with UPX
 
-### UPX compression
-
-the bADR file is compressed with UPX to reduce the size of the exe.
-
-```
-19.5 ko => 12 ko
-```
-
 ### Anti Virus
 
 **bADR.exe**
@@ -41,7 +33,7 @@ the bADR file is compressed with UPX to reduce the size of the exe.
 *   ✅     Chrome AntiVirus
 *   ✅     Manalyzer
 
-## ADR (bin)
+## ADR (dll)
 
 ADR is compiled in DLL, encoded in XOR, then uploaded to a server to be loaded later by bADR. 
 the main function is the entry point of the malware, this function aims to:
@@ -59,14 +51,6 @@ the main function is the entry point of the malware, this function aims to:
     * Machine Name
 * all this data is then compressed into a Zip file which will be sent to a discord webhook (obviously this data can be sent to any public server or webhook).
 
-### UPX compression
-
-the ADR file is compressed with UPX to reduce the size of the exe.
-
-```
-663 ko => 302 ko
-```
-
 ### Anti Virus
 
 **ADR.bin (XOR)**
@@ -75,3 +59,21 @@ the ADR file is compressed with UPX to reduce the size of the exe.
 *   ✅     Windows Defender
 *   ✅     Chrome AntiVirus
 *   ✅     Manalyzer
+
+
+### UPX compression
+
+ADR and bADR files are compressed with UPX to reduce the size of the payload.
+
+```
+bADR.exe 19.5 ko => 12 ko
+ADR.dll 663 ko => 302 ko
+```
+
+### Demo
+
+Once the malware is launched, all the information is then sent to a url. In the demo, it's a discord webhook that displays the data we collect.
+This data comes from a Virustotal virtual machine that checks and analyzes the behavior of the malware.
+Here is the message we receive from the webhook after the program is launched on one of these virtual machines:
+
+![demo.png](demo.png)
