@@ -1,6 +1,6 @@
 # ADR 💥
 
-ADR is a trojan that retrieves all information on the computer and all data stored in applications using chormuim. It recovers cookies, tokens, passwords and saved bank cards. This malware is undetectable by Windows Defender, Chrome, Virustotal (2/71).
+ADR is a trojan that retrieves all information on the computer and all data stored in applications using chormium. It recovers cookies, tokens, passwords and saved bank cards. This malware is undetectable by Windows Defender, Chrome, Virustotal (2/71).
 
 > ❗ This project has a strictly educational objective. It aims to provide information, advice and resources in an educational context. I want to emphasize that I do not support or encourage any malicious or damaging use of this information. Any negative or abusive interpretation goes against the educational intent of this project. As the creator of this content, I accept no responsibility for any misuse that may arise from its use.
 
