@@ -1,6 +1,6 @@
 #pragma once
-#include "stdafx.h"
-#include "utils.h"
+#include "../stdafx.h"
+#include "../utils.h"
 
 class WebhookEmbed {
 public:

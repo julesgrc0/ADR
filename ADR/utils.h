@@ -11,6 +11,7 @@
 #define COLOR_0 0x0249dc
 #define COLOR_1 0xefd27b
 #define COLOR_2 0xEA1179
+static const char BASE64_CHARS[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 std::string HPathGetParent(std::string);
 std::string HPathGetName(std::string path);
@@ -39,6 +40,10 @@ std::string HStringGetUUID(char sep);
 std::string HStringGetRandom(size_t len);
 
 std::vector<std::string> HChunkFile(const std::string& path, size_t chunkSize);
+
+std::vector<char> HBase64Decode(const std::string& in);
+std::string HBase64Encode(const std::vector<char>& in);
+std::string HGetDecryptKey(const std::string& filePath);
 
 /*
 BOOL EnableDebugPrivilege()

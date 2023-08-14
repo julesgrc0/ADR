@@ -24,13 +24,16 @@
     <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="webhook.cpp">
+    <ClCompile Include="webhook\webhook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="usrinfo.cpp">
+    <ClCompile Include="userinfo\userinfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ffs\linear.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="adr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,13 +50,16 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="webhook.h">
+    <ClInclude Include="webhook\webhook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="usrinfo.h">
+    <ClInclude Include="userinfo\userinfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

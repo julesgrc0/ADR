@@ -1,6 +1,6 @@
 #pragma once
-#include "webhook.h"
-#include "utils.h"
+#include "../webhook/webhook.h"
+#include "../utils.h"
 
 class UserInfo {
 public:

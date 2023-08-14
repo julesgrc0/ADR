@@ -1,4 +1,6 @@
-#include "usrinfo.h"
+#include "userinfo.h"
+
+/*
 
 #define WIN32_LEAN_AND_MEAN
 #define _CRT_SECURE_NO_WARNINGS
@@ -7,6 +9,7 @@
 #include <winsock2.h>
 #include <Lmcons.h>
 #include <iphlpapi.h>
+*/
 
 UserInfo::UserInfo()
 {

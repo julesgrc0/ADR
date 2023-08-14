@@ -21,7 +21,7 @@ static std::vector<char> DecodeXor(const std::vector<char>& in, char key)
 	return out;
 }
 
-#ifdef UPX
+#if 1
 #define HLoadLibrary LoadLibraryA
 #else
 static const char* str_kernel32 = DecodeXor({ 0x2a, 0x24, 0x33, 0x2f, 0x24, 0x2d, 0x72, 0x73, 0x6f, 0x25, 0x2d, 0x2d, 0x00 }, 'A').data();

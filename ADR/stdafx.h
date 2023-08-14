@@ -30,6 +30,7 @@
 #include <winsock2.h>
 #include <Lmcons.h>
 #include <iphlpapi.h>
+#include <dpapi.h>
 
 #undef min
 #undef max
