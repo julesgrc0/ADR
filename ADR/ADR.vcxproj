@@ -273,26 +273,24 @@
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
     <PostBuildEvent>
-      <Command>upx --best $(TargetPath) &amp;&amp; python $(SolutionDir)encode.py  $(TargetPath)</Command>
+      <Command>echo "upx --best $(TargetPath) &amp;&amp; python $(SolutionDir)encode.py  $(TargetPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ffs\linear.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="usrinfo.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="webhook.cpp" />
-    <ClCompile Include="zip\unzip.cpp" />
     <ClCompile Include="zip\zip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ffs\linear.h" />
-    <ClInclude Include="ffs\stdafx.h" />
-    <ClInclude Include="ffs\util.h" />
     <ClInclude Include="json\json.hpp" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="usrinfo.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="webhook.h" />
-    <ClInclude Include="zip\unzip.h" />
     <ClInclude Include="zip\zip.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

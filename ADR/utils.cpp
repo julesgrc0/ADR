@@ -65,6 +65,26 @@ std::string HPathGetWinFld(REFKNOWNFOLDERID id)
     return path;
 }
 
+void HPathReadDirectory(const std::string& path, std::function<bool(const WIN32_FIND_DATAA&)> handleFunc)
+{
+    WIN32_FIND_DATAA findData;
+    HANDLE findHandle = FindFirstFileA((path + "\\*").c_str(), &findData);
+
+    if (findHandle == INVALID_HANDLE_VALUE) {
+        FindClose(findHandle);
+        return;
+    }
+
+    do {
+        if (!handleFunc(findData))
+        {
+            break;
+        }
+    } while (FindNextFileA(findHandle, &findData));
+
+    FindClose(findHandle);
+}
+
 bool HProcTerminateTree(DWORD id)
 {
     HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -192,7 +212,7 @@ std::vector<std::string> HPathGetFiles(const std::string& path)
 {
     std::vector<std::string> files;
 
-    ReadDirectory(path, [&](const WIN32_FIND_DATAA& findData) {
+    HPathReadDirectory(path, [&](const WIN32_FIND_DATAA& findData) {
         
         if (findData.dwFileAttributes != INVALID_FILE_ATTRIBUTES && !(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
@@ -346,7 +366,7 @@ std::vector<std::string> HChunkFile(const std::string& path, size_t chunkSize)
         {
             char buffer[4096]; 
 
-            std::size_t bytesRead = min(remainingBytes, sizeof(buffer));
+            std::size_t bytesRead = std::min(remainingBytes, sizeof(buffer));
             ifs.read(buffer, bytesRead);
             out.write(buffer, bytesRead);
             remainingBytes -= bytesRead;

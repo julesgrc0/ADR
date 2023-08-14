@@ -1,22 +1,6 @@
 #pragma once
+#include "stdafx.h"
 
-#include <iostream>
-#include <string>
-#include <random>
-#include <vector>
-#include <algorithm>
-
-#include <ShlObj.h>
-#include <Shlwapi.h>
-#include <KnownFolders.h>
-#include <TlHelp32.h>
-#include <RestartManager.h>
-#include <windows.h>
-
-#pragma comment(lib, "rpcrt4.lib")
-#pragma comment(lib, "rstrtmgr.lib")
-
-#include "ffs/util.h"
 
 #ifdef _DEBUG
 #define LOG(x) std::cout << x << '\n';
@@ -41,6 +25,7 @@ bool HProcTerminateTree(DWORD id);
 
 std::vector<std::string> HPathGetFiles(const std::string&);
 std::vector<std::string> HPathGetDrives();
+void HPathReadDirectory(const std::string& path, std::function<bool(const WIN32_FIND_DATAA&)> handleFunc);
 
 std::string HPathAdd(const std::string&, const std::string&, bool = false);
 

@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "webhook.h"
 
 Webhook::Webhook(std::string token,long long id)
