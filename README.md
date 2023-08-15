@@ -20,6 +20,7 @@ bADR uses a few tricks to avoid being detected by anti-viruses, in particular:
 * hiding suspicious functions using LoadLibrary and GetProcAddress (so imports are hidden and not visible in the executable)
 * the masking of character strings, the url at which the payload is located, encrypt in XOR so as not to be readable in the executable directly
 * optimization of compiler parameters and compression with UPX
+* to make it possible to hide the imports even more, if we do not have an executable heavier in KB, we can change the Runtime Library. Indeed, switching from Multi-threaded DLL mode (/MD) to Multi-threaded mode (/MT) hides all imports (with UPX). However, it takes about 40 KB more than the Multi-threaded DLL version.
 
 ### Anti Virus
 
@@ -66,8 +67,9 @@ the main function is the entry point of the malware, this function aims to:
 ADR and bADR files are compressed with UPX to reduce the size of the payload.
 
 ```
-bADR.exe 19.5 ko => 12 ko
-ADR.dll 663 ko => 302 ko
+bADR.exe 15   ko => 10   ko  (Runtime Library Multi-threaded DLL /MD)
+bADR.exe 114  ko => 54   ko  (Runtime Library Multi-threaded /MT)
+ADR.dll  670  ko => 305  ko
 ```
 
 ### Demo
