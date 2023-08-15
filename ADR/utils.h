@@ -1,17 +1,17 @@
 #pragma once
 #include "stdafx.h"
 
-
 #ifdef _DEBUG
 #define LOG(x) std::cout << x << '\n';
 #else
 #define LOG(x)
-#endif // _DEBUG
+#endif  // _DEBUG
 
 #define COLOR_0 0x0249dc
 #define COLOR_1 0xefd27b
 #define COLOR_2 0xEA1179
-static const char BASE64_CHARS[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static const char BASE64_CHARS[65] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 std::string HPathGetParent(std::string);
 std::string HPathGetName(std::string path);
@@ -26,7 +26,9 @@ bool HProcTerminateTree(DWORD id);
 
 std::vector<std::string> HPathGetFiles(const std::string&);
 std::vector<std::string> HPathGetDrives();
-void HPathReadDirectory(const std::string& path, std::function<bool(const WIN32_FIND_DATAA&)> handleFunc);
+void HPathReadDirectory(
+    const std::string& path,
+    std::function<bool(const WIN32_FIND_DATAA&)> handleFunc);
 
 std::string HPathAdd(const std::string&, const std::string&, bool = false);
 
@@ -52,7 +54,8 @@ BOOL EnableDebugPrivilege()
     LUID luid;
     TOKEN_PRIVILEGES tkp;
 
-    if(!OpenProcessToken( GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken ))
+    if(!OpenProcessToken( GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES |
+TOKEN_QUERY, &hToken ))
     {
         return FALSE;
     }

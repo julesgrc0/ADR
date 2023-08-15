@@ -36,8 +36,8 @@ def xor_str(data: str, key: str):
         hex_value = hex(ord(char))[2:].zfill(2)
         print(f"0x{hex_value}", end=', ')
 
-def main():
-    if len(sys.argv) <= 1:
+def main(args: list[str]) -> int:
+    if len(args) < 1:
         return 1
     
     inpath = sys.argv[1]
@@ -51,4 +51,4 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

@@ -25,7 +25,6 @@
 #define HOST_MACHINE IMAGE_FILE_MACHINE_I386
 #endif
 
-
 struct ExportNameEntry {
   LPCSTR name;
   WORD idx;
@@ -74,7 +73,6 @@ typedef struct {
 
 #define GET_HEADER_DICTIONARY(module, idx) \
   &(module)->headers->OptionalHeader.DataDirectory[idx]
-
 
 static inline uintptr_t AlignValueDown(uintptr_t value, uintptr_t alignment) {
   return value & ~(alignment - 1);

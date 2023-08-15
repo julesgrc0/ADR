@@ -23,10 +23,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mem\memod.cpp">
+    <ClCompile Include="mem\memod.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

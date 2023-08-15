@@ -4,13 +4,10 @@
 
 #include <windows.h>
 
-typedef void* HMEMORYMODULE;
+typedef LPVOID HMEMORYMODULE;
+typedef LPVOID HMEMORYRSRC;
+typedef LPVOID HCUSTOMMODULE;
 
-typedef void* HMEMORYRSRC;
-
-typedef void* HCUSTOMMODULE;
-
-extern "C" {
 
 typedef LPVOID (*CustomAllocFunc)(LPVOID, SIZE_T, DWORD, DWORD, void*);
 typedef BOOL (*CustomFreeFunc)(LPVOID, SIZE_T, DWORD, void*);
@@ -37,4 +34,3 @@ int MemoryCallEntryPoint(HMEMORYMODULE);
 int MemoryLoadString(HMEMORYMODULE, UINT, LPTSTR, int);
 int MemoryLoadStringEx(HMEMORYMODULE, UINT, LPTSTR, int, WORD);
 
-}
