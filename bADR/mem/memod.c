@@ -6,9 +6,9 @@
 #include <windows.h>
 #include <winnt.h>
 
+#if _MSC_VER
 #include "../utils.h"
 
-#if _MSC_VER
 #pragma warning(disable : 4055)
 #pragma warning(error : 4244)
 #pragma warning(error : 4267)
