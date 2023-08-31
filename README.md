@@ -85,6 +85,13 @@ build.bat
 *   ✅     Chrome AntiVirus
 *   ✅     Manalyzer
 
+**ADR (DLL)**
+
+*   ❔     Virustotal 2/70 
+    * ❌     2
+    * ✅     70
+*   ✅     Windows Defender
+
 ### UPX compression
 
 ADR and bADR files are compressed with UPX to reduce the size of the payload.
@@ -92,7 +99,7 @@ ADR and bADR files are compressed with UPX to reduce the size of the payload.
 ```
 bADR.exe 15   ko => 10   ko  (Runtime Library Multi-threaded DLL /MD)
 bADR.exe 114  ko => 54   ko  (Runtime Library Multi-threaded /MT)
-ADR.dll  670  ko => 305  ko
+ADR.dll  17  ko => 10.5  ko
 ```
 
 ### Demo
