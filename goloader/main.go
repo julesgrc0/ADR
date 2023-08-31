@@ -1,7 +1,7 @@
 package main
 
-// #cgo CFLAGS: -I"../bADR/mem/"
-// #cgo LDFLAGS: -L"../bADR/mem/"
+// #cgo CFLAGS: -I"../loader/mem/"
+// #cgo LDFLAGS: -L"../loader/mem/"
 // #include "memod.h"
 import "C"
 

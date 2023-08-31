@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ADR", "ADR\ADR.vcxproj", "{300537B1-6233-47EA-BAFB-F66E24A26373}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "payload", "payload\payload.vcxproj", "{300537B1-6233-47EA-BAFB-F66E24A26373}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bADR", "bADR\bADR.vcxproj", "{47A25010-E7D8-4630-8A6D-76778C8EB6F2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "loader", "loader\loader.vcxproj", "{47A25010-E7D8-4630-8A6D-76778C8EB6F2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rADR", "rADR\rADR.vcxproj", "{E961312C-2568-49C1-8FC2-21D5CCF46256}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unpacker", "unpacker\unpacker.vcxproj", "{E961312C-2568-49C1-8FC2-21D5CCF46256}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

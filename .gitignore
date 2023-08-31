@@ -3,7 +3,9 @@
 /x64
 /Release
 /Debug
-/bADR/x64
-/ADR/x64
-/gADR/*.exe
-/rADR
+
+/loader/x64
+/payload/x64
+/unpacker
+
+*.exe
