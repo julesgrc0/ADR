@@ -6,6 +6,6 @@
 
 /loader/x64
 /payload/x64
-/unpacker
+/unpacker/x64
 
 *.exe
