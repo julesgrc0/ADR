@@ -23,13 +23,13 @@ if(pack->file != INVALID_HANDLE_VALUE)\
 
 
 
-Pack*	PackCreate();
-void	PackDestroy(Pack* pack);
+Pack*		PackCreate();
+void		PackDestroy(Pack* pack);
 
-bool	PackCompress(Pack** in);
-bool	PackWriteFile(Pack* pack, const char* path);
-bool    PackWriteBuffer(Pack* pack, const char* name, const char* buffer, size_t len);
-bool	PackSend(Pack* pack, const char* host, unsigned short port);
+bool		PackCompress(Pack** in);
+bool		PackWriteFile(Pack* pack, const char* path);
+bool		PackWriteBuffer(Pack* pack, const char* name, const char* buffer, size_t len);
+bool		PackSend(Pack* pack, const char* host, unsigned short port);
 
-void PackTargetFiles(Pack* pack, char* base, char** targets, size_t len);
-void PackDirectoryFiles(Pack* pack, char* dirpath, char** extensions, size_t len);
+void		PackTargetFiles(Pack* pack, char* base, char** targets, size_t len);
+void		PackDirectoryFiles(Pack* pack, char* dirpath, char** extensions, size_t len);

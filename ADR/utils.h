@@ -5,22 +5,11 @@
 wchar_t*	StringToWString(const char* str);
 char*		WStringToString(const wchar_t* wstr);
 
+char*		GetEncryptionKeyString(const char* path);
+char*		ExtractEncyrptionKey(const char* key);
 
-/*
- FILE_DISPOSITION_INFO fdi;
-            fdi.DeleteFile = TRUE;      //  Marking for deletion
-            Success = SetFileInformationByHandle(
-                CompressedFile,
-                FileDispositionInfo,
-                &fdi,
-                sizeof(FILE_DISPOSITION_INFO));
-*/
+bool		TerminateBusyFileProc(const char* path);
+bool		IsFileBusy(const char* path);
 
-char* GetEncryptionKeyString(const char* path);
-char* ExtractEncyrptionKey(const char* key);
-
-bool TerminateBusyFileProc(const char* path);
-bool IsFileBusy(const char* path);
-
-char*	GetWinFolderById(REFKNOWNFOLDERID id);
-bool	IsValidDirectory(const WIN32_FIND_DATAA findData);
+char*		GetWinFolderById(REFKNOWNFOLDERID id);
+bool		IsValidDirectory(const WIN32_FIND_DATAA findData);

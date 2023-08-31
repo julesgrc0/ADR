@@ -124,27 +124,27 @@ bool PackWriteFile(Pack* pack, const char* path)
     HANDLE hFile = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)  return false;
 
-    LARGE_INTEGER file_size;
-    if (!GetFileSizeEx(hFile, &file_size))
+    if (!WriteFile(pack->file, path, strlen(path) + 1, NULL, NULL))
     {
         CloseHandle(hFile);
         return false;
     }
 
-    DWORD  out_size = (DWORD)strlen(path) + 1;
-    if (!WriteFile(pack->file, path, out_size, NULL, NULL)) 
+    LARGE_INTEGER lgint;
+    if (!GetFileSizeEx(hFile, &lgint))
+    {
+        CloseHandle(hFile);
+        return false;
+    }
+    
+    size_t file_size = lgint.QuadPart;
+    if (!WriteFile(pack->file, &file_size, sizeof(size_t), NULL, NULL))
     {
         CloseHandle(hFile);
         return false;
     }
 
-    if (!WriteFile(pack->file, &file_size.QuadPart, sizeof(LONGLONG), NULL, NULL))
-    {
-        CloseHandle(hFile);
-        return false;
-    }
-
-    BYTE buffer[4096];
+    BYTE buffer[BUFFER_SIZE];
     DWORD bytes_read;
     while (ReadFile(hFile, buffer, sizeof(buffer), &bytes_read, NULL) && bytes_read > 0) 
     {
@@ -253,7 +253,6 @@ void PackTargetFiles(Pack* pack, char* base, char** targets, size_t len)
     for (size_t k = 0; k < len; k++)
     {
         char inpath[MAX_PATH];
-
         if (!PathCombineA(inpath, base, targets[k])) continue;
         if (!PathFileExistsA(inpath)) continue;
 
@@ -263,14 +262,18 @@ void PackTargetFiles(Pack* pack, char* base, char** targets, size_t len)
 
 void PackDirectoryFiles(Pack* pack, char* dirpath, char** extensions, size_t len)
 {
-    char searchPath[MAX_PATH];
-    PathCombineA(searchPath, dirpath, "*.*");
+    char* search_path = (char*)malloc(strlen(dirpath) + 3);
+    NULL_RET(search_path, );
+
+    strcpy(search_path, dirpath);
+    strcat(search_path, "\\*");
 
     WIN32_FIND_DATAA findData;
-    HANDLE hFind = FindFirstFileA(searchPath, &findData);
+    HANDLE hFind = FindFirstFileA(search_path, &findData);
 
     if (hFind == INVALID_HANDLE_VALUE)
     {
+        free(search_path);
         return;
     }
 
@@ -278,21 +281,20 @@ void PackDirectoryFiles(Pack* pack, char* dirpath, char** extensions, size_t len
     {
         if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            char ext[MAX_PATH];
-            PathFindExtensionA(findData.cFileName, ext);
-
+            char* ext = PathFindExtensionA(findData.cFileName);
             for (size_t i = 0; i < len; i++)
             {
                 if (strcmp(ext, extensions[i]) == 0)
                 {
-                    char filePath[MAX_PATH];
-                    PathCombineA(filePath, dirpath, findData.cFileName);
-                    PackWriteFile(pack, filePath);
+                    char file_path[MAX_PATH];
+                    PathCombineA(file_path, dirpath, findData.cFileName);
+                    PackWriteFile(pack, file_path);
                     break;
                 }
             }
         }
     } while (FindNextFileA(hFind, &findData) != 0);
 
+    free(search_path);
     FindClose(hFind);
 }

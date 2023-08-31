@@ -9,6 +9,6 @@ typedef struct FFSearch
 } FFSearch;
 
 
-FFSearch* FFCreateResult();
-void	FFSearchLinearDir(const char* path, const char* search, FFSearch* out);
-void	FFDestroyResult(FFSearch*);
+FFSearch*	FFCreateResult();
+void		FFSearchLinearDir(const char* path, const char* search, FFSearch* out);
+void		FFDestroyResult(FFSearch*);
