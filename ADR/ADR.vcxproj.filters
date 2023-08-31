@@ -15,51 +15,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="zip\zip.cpp">
+    <ClCompile Include="utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
+    <ClCompile Include="pack\pack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="webhook\webhook.cpp">
+    <ClCompile Include="ffs\linear.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="userinfo\userinfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ffs\linear.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="adr.cpp">
+    <ClCompile Include="b64\b64.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="json\json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ffs\linear.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zip\zip.h">
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="webhook\webhook.h">
+    <ClInclude Include="pack\pack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="userinfo\userinfo.h">
+    <ClInclude Include="ffs\linear.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adr.h">
+    <ClInclude Include="b64\b64.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

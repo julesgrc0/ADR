@@ -277,23 +277,18 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="adr.cpp" />
-    <ClCompile Include="ffs\linear.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="userinfo\userinfo.cpp" />
-    <ClCompile Include="utils.cpp" />
-    <ClCompile Include="webhook\webhook.cpp" />
-    <ClCompile Include="zip\zip.cpp" />
+    <ClCompile Include="utils.c" />
+    <ClCompile Include="b64\b64.c" />
+    <ClCompile Include="ffs\linear.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="pack\pack.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="adr.h" />
-    <ClInclude Include="ffs\linear.h" />
-    <ClInclude Include="json\json.hpp" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="userinfo\userinfo.h" />
     <ClInclude Include="utils.h" />
-    <ClInclude Include="webhook\webhook.h" />
-    <ClInclude Include="zip\zip.h" />
+    <ClInclude Include="b64\b64.h" />
+    <ClInclude Include="ffs\linear.h" />
+    <ClInclude Include="pack\pack.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

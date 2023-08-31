@@ -2,18 +2,13 @@
 #include "../stdafx.h"
 #include "../utils.h"
 
-static std::mutex m_mutex;
+typedef struct FFSearch
+{
+	char** elements;
+	size_t len;
+} FFSearch;
 
-static bool IsValidDirectory(const WIN32_FIND_DATAA& findData) {
-  return (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-         strcmp(findData.cFileName, ".") != 0 &&
-         strcmp(findData.cFileName, "..") != 0;
-}
 
-void PreloadSearchLinear(std::string path, const std::string& search,
-                         std::vector<std::string>& results,
-                         std::vector<std::string>& folders);
-void SearchLinear(std::string path, const std::string& search,
-                  std::vector<std::string>& results);
-void SearchParallelLinear(std::string target, const std::string& search,
-                          std::vector<std::string>& results);
+FFSearch* FFCreateResult();
+void	FFSearchLinearDir(const char* path, const char* search, FFSearch* out);
+void	FFDestroyResult(FFSearch*);
