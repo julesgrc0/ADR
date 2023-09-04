@@ -85,20 +85,20 @@ bool PackBuildStructure(char* file)
     HANDLE hFile = CreateFileA(file, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)  return false;
 
+
+    BYTE byte = 0;
     DWORD bytes_read = 0;
+    DWORD size = 0;
 
-    BYTE byte;
-    DWORD bytesRead;
-
-    size_t size = 0;
     DataFileState state = R_PATH;
 
     char   tmp_size[sizeof(size_t)];
     size_t file_size = 0;
     char* file_path = malloc(0);
+
     HANDLE hOutFile = INVALID_HANDLE_VALUE;
 
-    while (ReadFile(hFile, &byte, sizeof(byte), &bytesRead, NULL) && bytesRead > 0)
+    while (ReadFile(hFile, &byte, sizeof(byte), &bytes_read, NULL) && bytes_read > 0)
     {
         switch (state)
         {
@@ -108,41 +108,38 @@ bool PackBuildStructure(char* file)
             file_path[size] = byte;
             size++;
 
-            if (byte == 0)
+            if (byte != 0)
             {
-                char dirname[MAX_PATH];
-                strncpy(dirname, file_path, MAX_PATH);
-                PathRemoveFileSpecA(file_path);
-
-                for (char* p = dirname; *p; ++p)
-                {
-                    if (*p == '\\' || *p == ':' || *p == ' ')
-                    {
-                        *p = '_';
-                    }
-                }
-
-                if (!PathIsDirectoryA(dirname))
-                {
-                    if (!CreateDirectoryA(dirname, 0))
-                    {
-                        free(file_path);
-                        return false;
-                    }
-                }
-
-                char* filename = PathFindFileNameA(file_path);
-                char  file_dest[MAX_PATH];
-                snprintf(file_dest, MAX_PATH, "%s\\%s", dirname, filename);
-
-                hOutFile = CreateFileA(file_dest, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-                free(file_path);
-                file_path = malloc(0);
-
-                state = R_FILESIZE;
-                size = 0;
+                break;
             }
+
+            char dirname[MAX_PATH];
+            strncpy(dirname, file_path, MAX_PATH);
+            PathRemoveFileSpecA(file_path);
+
+            for (char* p = dirname; *p; ++p)
+            {
+                if (*p == '\\' || *p == ':' || *p == ' ')
+                {
+                    *p = '_';
+                }
+            }
+
+            if (!PathIsDirectoryA(dirname) && !CreateDirectoryA(dirname, 0))
+            {
+                free(file_path);
+                return false;
+            }
+
+            char* filename = PathFindFileNameA(file_path);
+            char  file_dest[MAX_PATH];
+            snprintf(file_dest, MAX_PATH, "%s\\%s", dirname, filename);
+
+            hOutFile = CreateFileA(file_dest, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+            file_path = realloc(file_path, 0);
+
+            state = R_FILESIZE;
+            size = 0;
         }
         break;
         case R_FILESIZE:
@@ -152,9 +149,8 @@ bool PackBuildStructure(char* file)
 
             if (size >= sizeof(size_t))
             {
-                memcpy(&file_size, tmp_size, sizeof(size_t));
+                memmove(&file_size, tmp_size, sizeof(size_t));
 
-                printf("%zu\n", file_size);
                 state = R_FILEDATA;
                 size = 0;
             }
@@ -164,6 +160,7 @@ bool PackBuildStructure(char* file)
         {
             if (hOutFile == INVALID_HANDLE_VALUE)
             {
+                free(file_path);
                 return false;
             }
             WriteFile(hOutFile, &byte, sizeof(BYTE), 0, 0);

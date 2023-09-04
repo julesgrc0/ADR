@@ -2,6 +2,21 @@
 #include "stdafx.h"
 #include "b64/b64.h"
 
+#ifdef _DEBUG || _DEBUG_EXE
+#define DBG_FILE_SIZE(path)\
+{\
+WIN32_FILE_ATTRIBUTE_DATA fileInfo;\
+if (GetFileAttributesExA(path, GetFileExInfoStandard, &fileInfo))\
+{\
+    ULARGE_INTEGER fileSize;\
+    fileSize.LowPart = fileInfo.nFileSizeLow;\
+    fileSize.HighPart = fileInfo.nFileSizeHigh;\
+    printf("%s: (%llu)\n", path, fileSize.QuadPart);\
+}\
+}
+#endif // _DEBUG || _DEBUG_EXE
+
+
 wchar_t*	StringToWString(const char* str);
 char*		WStringToString(const wchar_t* wstr);
 

@@ -13,7 +13,9 @@ Pack* PackCreate()
     if (GetTempPathA(MAX_PATH, tempPath) == 0)  return NULL;
     if (GetTempFileNameA(tempPath, "pack", 0, pack->path) == 0)  return NULL;
 
-    PACK_HANDLE_CHECK(pack, GENERIC_WRITE, 0, NULL);
+    pack->file = CreateFileA(pack->path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL); \
+    PACK_HANDLE_RESET(pack);
+    
     return pack;
 }
 
@@ -25,6 +27,7 @@ bool PackCompress(Pack** in)
     LARGE_INTEGER file_size;
     if (!GetFileSizeEx((*in)->file, &file_size))
     {
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
@@ -32,6 +35,7 @@ bool PackCompress(Pack** in)
     BYTE* in_buffer = malloc(in_size);
     if (!in_buffer)
     {
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
@@ -39,12 +43,14 @@ bool PackCompress(Pack** in)
     if (!ReadFile((*in)->file, in_buffer, in_size, &bytes_read, NULL))
     {
         free(in_buffer);
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
     if (bytes_read != in_size)
     {
         free(in_buffer);
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
@@ -52,6 +58,7 @@ bool PackCompress(Pack** in)
     if (!CreateCompressor(COMPRESS_ALGORITHM_XPRESS_HUFF, NULL, &hCompressor))
     {
         free(in_buffer);
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
@@ -64,6 +71,7 @@ bool PackCompress(Pack** in)
     {
         free(in_buffer);
         CloseCompressor(hCompressor);
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
@@ -72,6 +80,7 @@ bool PackCompress(Pack** in)
         free(out_buffer);
         free(in_buffer);
         CloseCompressor(hCompressor);
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
@@ -83,6 +92,15 @@ bool PackCompress(Pack** in)
     if (!out)
     {
         free(out_buffer);
+        PACK_HANDLE_RESET((*in));
+        return false;
+    }
+    
+    out->file = CreateFileA(out->path, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (out->file == INVALID_HANDLE_VALUE)
+    {
+        free(out_buffer);
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
@@ -91,6 +109,7 @@ bool PackCompress(Pack** in)
     {
         free(out_buffer);
         PackDestroy(out);
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
@@ -98,12 +117,15 @@ bool PackCompress(Pack** in)
     {
         free(out_buffer);
         PackDestroy(out);
+        PACK_HANDLE_RESET((*in));
         return false;
     }
 
     free(out_buffer);
     PackDestroy((*in));
+    
     *in = out;
+    PACK_HANDLE_RESET((*in));
 
     return true;
 }
@@ -111,22 +133,28 @@ bool PackCompress(Pack** in)
 bool PackWriteFile(Pack* pack, const char* path)
 {
     PACK_HANDLE_RESET(pack);
-    PACK_HANDLE_CHECK(pack, GENERIC_WRITE, 0, false);
+    PACK_HANDLE_CHECK(pack, FILE_APPEND_DATA, 0, false);
 
     if (IsFileBusy(path))
     {
         if (!TerminateBusyFileProc(path))
         {
+            PACK_HANDLE_RESET(pack);
             return false;
         }
     }
 
     HANDLE hFile = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (hFile == INVALID_HANDLE_VALUE)  return false;
+    if (hFile == INVALID_HANDLE_VALUE) 
+    {
+        PACK_HANDLE_RESET(pack);
+        return false;
+    }
 
     if (!WriteFile(pack->file, path, strlen(path) + 1, NULL, NULL))
     {
         CloseHandle(hFile);
+        PACK_HANDLE_RESET(pack);
         return false;
     }
 
@@ -134,6 +162,7 @@ bool PackWriteFile(Pack* pack, const char* path)
     if (!GetFileSizeEx(hFile, &lgint))
     {
         CloseHandle(hFile);
+        PACK_HANDLE_RESET(pack);
         return false;
     }
     
@@ -141,38 +170,44 @@ bool PackWriteFile(Pack* pack, const char* path)
     if (!WriteFile(pack->file, &file_size, sizeof(size_t), NULL, NULL))
     {
         CloseHandle(hFile);
+        PACK_HANDLE_RESET(pack);
         return false;
     }
 
     BYTE buffer[BUFFER_SIZE];
-    DWORD bytes_read;
+    DWORD bytes_read = 0;
+
     while (ReadFile(hFile, buffer, sizeof(buffer), &bytes_read, NULL) && bytes_read > 0) 
     {
-        DWORD bytes_written;
+        DWORD bytes_written = 0;
         if (!WriteFile(pack->file, buffer, bytes_read, &bytes_written, NULL) || bytes_written != bytes_read) 
         {
             CloseHandle(hFile);
+            PACK_HANDLE_RESET(pack);
             return false;
         }
     }
 
     CloseHandle(hFile);
+    PACK_HANDLE_RESET(pack);
     return true;
 }
 
 bool PackWriteBuffer(Pack* pack, const char* name, const char* buffer, size_t len)
 {
     PACK_HANDLE_RESET(pack);
-    PACK_HANDLE_CHECK(pack, GENERIC_WRITE, 0, false);
+    PACK_HANDLE_CHECK(pack, FILE_APPEND_DATA, 0, false);
     
     DWORD  out_size = (DWORD)strlen(name) + 1;
     if (!WriteFile(pack->file, name, out_size, NULL, NULL))
     {
+        PACK_HANDLE_RESET(pack);
         return false;
     }
 
     if (!WriteFile(pack->file, &len, sizeof(LONGLONG), NULL, NULL))
     {
+        PACK_HANDLE_RESET(pack);
         return false;
     }
 
@@ -180,9 +215,11 @@ bool PackWriteBuffer(Pack* pack, const char* name, const char* buffer, size_t le
     DWORD bytes_written;
     if (!WriteFile(pack->file, buffer, len, &bytes_written, NULL) || bytes_written != len)
     {
+        PACK_HANDLE_RESET(pack);
         return false;
     }
 
+    PACK_HANDLE_RESET(pack);
     return true;
 }
 
@@ -208,6 +245,7 @@ bool PackSend(Pack* pack, const char* host, unsigned short port)
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
+        PACK_HANDLE_RESET(pack);
         return false;
     }
 
@@ -215,6 +253,7 @@ bool PackSend(Pack* pack, const char* host, unsigned short port)
     if (client == INVALID_SOCKET)
     {
         WSACleanup();
+        PACK_HANDLE_RESET(pack);
         return false;
     }
 
@@ -228,6 +267,7 @@ bool PackSend(Pack* pack, const char* host, unsigned short port)
     {
         closesocket(client);
         WSACleanup();
+        PACK_HANDLE_RESET(pack);
         return false;
     }
 
@@ -239,12 +279,14 @@ bool PackSend(Pack* pack, const char* host, unsigned short port)
         {
             closesocket(client);
             WSACleanup();
+            PACK_HANDLE_RESET(pack);
             return false;
         }
     }
 
     closesocket(client);
     WSACleanup();
+    PACK_HANDLE_RESET(pack);
     return true;
 }
 

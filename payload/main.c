@@ -95,8 +95,7 @@ DLL_EXPORT int CALLBACK main()
     FFDestroyResult(results);
 
     PackCompress(&pack);
-    PACK_HANDLE_RESET(pack);
-    
+
     PackSend(pack, ENDPOINT_HOST, ENDPOINT_PORT);
 
     PackDestroy(pack);
