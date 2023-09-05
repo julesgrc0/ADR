@@ -10,3 +10,5 @@ typedef enum DataFileState {
 bool PackDecompress(char* file);
 
 bool PackBuildStructure(char* file);
+
+char* PackGetOutName(char* base, char* ext_path);

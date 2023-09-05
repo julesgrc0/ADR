@@ -5,7 +5,7 @@
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ char* pCmdLine, _In_ int nCmdShow)
 {
-#ifdef _DEBUG || _DEBUG_EXE
+#ifdef _DEBUG
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif // _DEBUG
 
@@ -28,22 +28,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	else
 	{
         ADR_LOG("Unpacker Mode");
-		for (size_t i = 1; i < __argc; i++)
-		{
-			char* file = __argv[i];
-			if (!PathFileExistsA(file))
-			{
+        for (size_t i = 1; i < __argc; i++)
+        {
+            char* file = __argv[i];
+            if (!PathFileExistsA(file))
+            {
                 ADR_LOG("Pack not found (%s)", file);
-				continue;
-			}
-		
-			
-            /*if (!PackDecompress(file))
-			{
+                continue;
+            }
+
+            if (!PackDecompress(file))
+            {
                 ADR_LOG("Pack decompression failed (%s)", file);
-				continue;
-			}*/
-            
+                continue;
+            }
 
             if (!PackBuildStructure(file))
             {
@@ -52,11 +50,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
             }
 
             ADR_LOG("Unpack success (%s)", file);
-		}
+        }
 	}
 
     
-#ifdef _DEBUG || _DEBUG_EXE
+#ifdef _DEBUG
     _CrtDumpMemoryLeaks();
 #endif // _DEBUG
 
